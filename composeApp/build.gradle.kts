@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.androidx.room)
 
     alias(libs.plugins.koin.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -29,7 +30,6 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            val koin_version = "4.2.0"
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
@@ -45,6 +45,12 @@ kotlin {
 
             implementation(libs.koin.core)
             implementation(libs.koin.annotations)
+
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.decompose)
+            implementation(libs.decomposeExtensions)
+
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
