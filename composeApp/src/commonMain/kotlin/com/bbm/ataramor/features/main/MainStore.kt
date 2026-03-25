@@ -4,10 +4,16 @@ import com.bbm.ataramor.core.mvi.BaseStore
 import com.bbm.ataramor.core.mvi.UiEffect
 import com.bbm.ataramor.core.mvi.UiIntent
 import com.bbm.ataramor.core.mvi.UiState
+import com.bbm.ataramor.data.repository.SettingsRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class MainStore(scope: CoroutineScope) :
+class MainStore(
+    scope: CoroutineScope,
+    private val repository: SettingsRepository
+) :
     BaseStore<MainStore.State, MainStore.Intent, MainStore.Effect>(
         initialState = State(),
         scope = scope
@@ -17,7 +23,8 @@ class MainStore(scope: CoroutineScope) :
         val rank: String = "20 кю",
         val unfinishedGameTitle: String? = "Незавершена гра",
         val isLoading: Boolean = false,
-        val error: String? = null
+        val error: String? = null,
+        val language: String? = null,
     ) : UiState
 
     sealed class Intent : UiIntent {
@@ -38,6 +45,16 @@ class MainStore(scope: CoroutineScope) :
 
     init {
         onIntent(Intent.LoadData)
+
+        repository.settingsFlow
+            .onEach { settings ->
+                updateState {
+                    it.copy(
+                        language = settings.language,
+                    )
+                }
+            }
+            .launchIn(scope)
     }
 
     override fun onIntent(intent: Intent) {
@@ -46,21 +63,27 @@ class MainStore(scope: CoroutineScope) :
             is Intent.ClickDarkWorld -> {
                 postEffect(Effect.PlayClickSound)
             }
+
             is Intent.ClickGameWithBot -> {
                 postEffect(Effect.PlayClickSound)
             }
+
             is Intent.ClickGameWithPlayer -> {
                 postEffect(Effect.PlayClickSound)
             }
+
             is Intent.ClickSaveLiberty -> {
                 postEffect(Effect.PlayClickSound)
             }
+
             is Intent.ClickDailyZen -> {
                 postEffect(Effect.PlayClickSound)
             }
+
             is Intent.ClickFirstBlood -> {
                 postEffect(Effect.PlayClickSound)
             }
+
             is Intent.ClickFlagCapture -> {
                 postEffect(Effect.PlayClickSound)
             }

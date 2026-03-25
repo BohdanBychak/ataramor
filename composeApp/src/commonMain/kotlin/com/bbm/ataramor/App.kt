@@ -18,6 +18,7 @@ import com.bbm.ataramor.core.theme.AtaramorTheme
 import com.bbm.ataramor.core.ui.AppBackground
 import com.bbm.ataramor.core.ui.CustomFloatingBottomBar
 import com.bbm.ataramor.features.main.MainContent
+import com.bbm.ataramor.features.settings.ui.SettingsContent
 import com.bbm.ataramor.root.RootComponent
 
 @Composable
@@ -52,7 +53,7 @@ fun RootContent(component: RootComponent) {
             ) {
                 when (val child = it.instance) {
                     is RootComponent.Child.MainChild -> MainContent(child.component)
-                    is RootComponent.Child.MenuChild -> DetailsContent()
+                    is RootComponent.Child.MenuChild -> SettingsContent(child.component)
                     is RootComponent.Child.PuzzlesChild -> DetailsContent()
                     is RootComponent.Child.GameChild -> DetailsContent()
                 }

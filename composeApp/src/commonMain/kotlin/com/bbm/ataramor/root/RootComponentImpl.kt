@@ -8,12 +8,15 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.bbm.ataramor.features.main.MainComponentImpl
+import com.bbm.ataramor.features.main.DefaultMainComponent
+import com.bbm.ataramor.features.settings.component.DefaultSettingsComponent
 import kotlinx.serialization.Serializable
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
 class RootComponentImpl(
     componentContext: ComponentContext,
-) : RootComponent, ComponentContext by componentContext {
+) : RootComponent, ComponentContext by componentContext, KoinComponent {
     private val navigation = StackNavigation<Config>()
 
     override val stack: Value<ChildStack<*, RootComponent.Child>> =
@@ -29,13 +32,21 @@ class RootComponentImpl(
     private fun createChild(config: Config, context: ComponentContext): RootComponent.Child =
         when (config) {
             is Config.Main -> RootComponent.Child.MainChild(
-                MainComponentImpl(
+                DefaultMainComponent(
                     componentContext = context,
                     onShowPuzzles = { navigation.push(Config.Puzzles) },
                     onShowGameWithBot = { navigation.push(Config.Menu) },
+                    settings = get()
                 )
             )
-            is Config.Menu -> RootComponent.Child.MenuChild()
+            is Config.Menu -> RootComponent.Child.MenuChild(
+                DefaultSettingsComponent(
+                    componentContext = context,
+                    onBack = { navigation.push(Config.Menu) },
+                    onEditProfile = { /* Handle edit profile */ },
+                    repository = get()
+                )
+            )
             is Config.Puzzles -> RootComponent.Child.PuzzlesChild()
         }
 

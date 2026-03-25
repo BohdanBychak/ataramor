@@ -51,6 +51,8 @@ kotlin {
             implementation(libs.decomposeExtensions)
 
             implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
+
+            implementation(libs.androidx.datastore.preferences)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

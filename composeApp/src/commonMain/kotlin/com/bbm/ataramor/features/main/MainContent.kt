@@ -52,7 +52,7 @@ fun MainContent(component: MainComponent) {
                         title = "ДВОБІЙ З БОТОМ",
                         description = "9x9/13x13/19x19",
                         painter = painterResource(Res.drawable.game_with_bot),
-                    ) { component.onGameWithBotClick() }
+                    ) { component.onIntent(MainStore.Intent.ClickGameWithBot) }
                 }
                 Box(modifier = Modifier.weight(1f)) {
                     ChoosingGameModeCard(
@@ -61,7 +61,7 @@ fun MainContent(component: MainComponent) {
                         description = "Локальний або онлайн",
                         painter = painterResource(Res.drawable.game_with_player),
                         isEnabled = false,
-                    ) { component.onGameWithPlayerClick() }
+                    ) { component.onIntent(MainStore.Intent.ClickGameWithPlayer) }
                 }
             }
         }
